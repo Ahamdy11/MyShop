@@ -1,1 +1,5 @@
-".vs/" 
+# Ignore Visual Studio temporary files, build results, and
+# build directories.
+*.log
+*.vs/
+.vscode/
