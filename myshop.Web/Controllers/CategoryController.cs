@@ -19,18 +19,48 @@ namespace myshop.Web.Controllers
             return View(categories);
         }
 
-        [HttpGet]
+        // Create Category 
+        [HttpGet] // User see the view of Creation 
         public IActionResult Create() 
         { 
             return View();
         }
 
-        [HttpPost]
+        [HttpPost] // When user click on Create Button or Back To Index Button
+        [ValidateAntiForgeryToken] // To save from Cross side forgery Attack (Server Side Validation)
         public IActionResult Create(Category category)
         {
-            _context.Categories.Add(category);
-            _context.SaveChanges();
-            return RedirectToAction("Index");
+            if(ModelState.IsValid) //Server Side Validation
+            {
+                _context.Categories.Add(category);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(category);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int? Id) 
+        { 
+            if(Id == null | Id == 0) 
+            {
+                return NotFound();
+            }
+            var categoriesDB = _context.Categories.Find(Id);
+            return View(categoriesDB);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Category category) 
+        {
+            if (ModelState.IsValid) //Server Side Validation
+            {
+                _context.Categories.Update(category);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(category);
         }
     }
 }
