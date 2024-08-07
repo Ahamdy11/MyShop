@@ -40,11 +40,11 @@ namespace myshop.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? Id) 
+        public IActionResult Edit(int? Id)  // Because Id is a primary key
         { 
             if(Id == null | Id == 0) 
             {
-                return NotFound();
+                NotFound();
             }
             var categoriesDB = _context.Categories.Find(Id);
             return View(categoriesDB);
@@ -61,6 +61,31 @@ namespace myshop.Web.Controllers
                 return RedirectToAction("Index");
             }
             return View(category);
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int? Id)  // Because Id is a primary key
+        {
+            if (Id == null | Id == 0)
+            {
+                NotFound();
+            }
+            var categoriesDB = _context.Categories.Find(Id);
+            return View(categoriesDB);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteCategory(int? Id)  // Because Id is a primary key
+        {
+            var categoriesDB = _context.Categories.Find(Id);
+            if (categoriesDB==null)
+            {
+                NotFound();
+            }
+            _context.Categories.Remove(categoriesDB);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
